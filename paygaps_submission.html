@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayGaps Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #1A5FAD;
+    --blue-tint: #EBF2FA;
+    --ink: #1A1F2E;
+    --muted: #6B7280;
+    --faint: #9CA3AF;
+    --border: #E2E5EA;
+    --surface: #F7F8FA;
+    --stone: #F0EDE8;
+    --stone-mid: #DDD9D3;
+    --success: #2A7D50;
+    --success-bg: #E4F0EB;
+    --warning: #B86D0A;
+    --warning-bg: #FEF3E2;
+    --warning-border: #D4993A;
+    --danger: #BE3030;
+    --danger-bg: #FCE8E8;
+    --sidebar: #1A1F2E;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--ink);
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* Cover */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--sidebar);
+    color: #fff;
+    padding: 64px 80px;
+    page-break-after: always;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 72px;
+  }
+  .logo-mark {
+    width: 30px; height: 30px;
+    background: var(--blue);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 14px; height: 14px; }
+  .logo-name { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .cover-eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 20px;
+  }
+  .cover-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .cover-title span { color: #5B9BD5; }
+  .cover-desc {
+    font-size: 18px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 400;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+  .cover-footer {
+    margin-top: auto;
+    padding-top: 36px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    gap: 48px;
+  }
+  .cover-footer-item .label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 4px;
+  }
+  .cover-footer-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+  }
+
+  /* Page layout */
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 64px 64px;
+  }
+  .page-break { page-break-before: always; padding-top: 64px; }
+
+  /* Part label */
+  .part-tag {
+    display: inline-block;
+    background: var(--blue-tint);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h1.page-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .page-intro {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* Section headings */
+  h2.section-heading {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section { margin-bottom: 40px; }
+
+  /* Body text */
+  .body-text {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .body-text:last-child { margin-bottom: 0; }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* Style tile */
+  .style-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    margin: 16px 0 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .tile-direction-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .tile-direction-tag {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .tile-mini-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--faint);
+    margin-bottom: 8px;
+  }
+  .swatches { display: flex; gap: 5px; margin-bottom: 5px; flex-wrap: wrap; }
+  .swatch { text-align: center; }
+  .swatch-block { height: 28px; width: 48px; border-radius: 5px; margin-bottom: 3px; }
+  .swatch-name { font-size: 10px; color: var(--faint); }
+  .status-swatches { display: flex; gap: 5px; margin-bottom: 18px; }
+  .status-swatch-block { height: 14px; width: 56px; border-radius: 3px; }
+  .type-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .type-box .t1 { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .type-box .t2 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .type-box .t3 { font-size: 13px; color: #4B5563; line-height: 1.5; margin-bottom: 4px; }
+  .type-box .t4 { font-size: 11px; font-weight: 500; color: var(--faint); letter-spacing: 0.05em; }
+  .comp-group { display: flex; flex-direction: column; gap: 10px; }
+  .comp-row { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+  .btn-p { background: var(--blue); color: #fff; border: none; border-radius: 6px; padding: 7px 13px; font-size: 12px; font-weight: 500; font-family: inherit; }
+  .btn-o { background: transparent; color: var(--blue); border: 1px solid var(--blue); border-radius: 6px; padding: 7px 13px; font-size: 12px; font-weight: 500; font-family: inherit; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+  .badge-s { background: var(--success-bg); color: var(--success); }
+  .badge-b { background: var(--blue-tint); color: var(--blue); }
+  .badge-w { background: var(--warning-bg); color: var(--warning); }
+  .badge-n { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+  .info-chip {
+    background: var(--blue-tint);
+    border: 1px solid #B8D0EC;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: var(--blue);
+    line-height: 1.5;
+  }
+
+  /* Measures */
+  .measure {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    background: #fff;
+  }
+  .measure-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--blue); color: #fff;
+    font-size: 13px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .measure h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  .measure-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .measure-problem {
+    background: var(--danger-bg);
+    border-radius: 6px; padding: 8px 10px;
+    font-size: 13px; color: var(--danger); line-height: 1.5;
+  }
+  .measure-problem strong { font-weight: 600; display: block; margin-bottom: 2px; }
+  .measure-solution {
+    background: var(--success-bg);
+    border-radius: 6px; padding: 8px 10px;
+    font-size: 13px; color: var(--success); line-height: 1.5;
+  }
+  .measure-solution strong { font-weight: 600; display: block; margin-bottom: 2px; }
+  .measure-look {
+    font-size: 13px; color: #374151; line-height: 1.6;
+    background: var(--surface);
+    border-radius: 6px; padding: 8px 10px;
+  }
+  .measure-look strong { font-weight: 600; color: var(--ink); display: block; margin-bottom: 2px; }
+
+  /* Tab blocks */
+  .tab-block {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .tab-header {
+    background: var(--sidebar);
+    padding: 14px 20px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  }
+  .tab-header h3 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+  .tab-header p { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .tab-pill {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.65);
+    font-size: 11px; font-weight: 500;
+    padding: 3px 8px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  .tab-rationale {
+    padding: 20px 22px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-rationale p { font-size: 13px; color: #374151; line-height: 1.7; margin-bottom: 8px; }
+  .tab-rationale p:last-child { margin-bottom: 0; }
+
+  .tab-decisions {
+    padding: 16px 22px 20px;
+    background: var(--surface);
+  }
+  .decisions-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--faint);
+    margin-bottom: 10px;
+  }
+  .decision {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 9px 0;
+    border-top: 1px solid var(--border);
+  }
+  .decision:first-of-type { border-top: none; }
+  .d-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--blue); flex-shrink: 0; margin-top: 6px;
+  }
+  .d-text { font-size: 13px; color: #374151; line-height: 1.55; }
+  .d-text strong { color: var(--ink); font-weight: 600; }
+
+  /* Embedded screen mockups */
+  .screen-wrap {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 14px 0 22px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .screen-chrome {
+    background: var(--stone);
+    padding: 7px 10px;
+    display: flex; align-items: center; gap: 5px;
+    border-bottom: 1px solid var(--stone-mid);
+  }
+  .chrome-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--stone-mid); }
+  .chrome-bar {
+    flex: 1; background: var(--stone-mid); border-radius: 3px; height: 15px;
+    margin: 0 8px; display: flex; align-items: center; padding: 0 8px;
+  }
+  .chrome-bar span { font-size: 10px; color: #9B9590; }
+  .screen-body { background: var(--surface); }
+
+  /* Stellenkatalog screen */
+  .sk-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .sk-table thead tr { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .sk-table thead th { padding: 8px 10px; text-align: left; font-size: 10px; font-weight: 500; color: var(--muted); }
+  .sk-table thead th:nth-child(4) { text-align: center; }
+  .sk-table tbody tr { border-bottom: 1px solid var(--border); background: #fff; }
+  .sk-table tbody tr.draft { background: var(--stone); }
+  .sk-table td { padding: 9px 10px; vertical-align: middle; }
+  .sk-table td .job-name { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .sk-table td .job-sub { font-size: 10px; color: var(--faint); }
+  .sk-table td.center { text-align: center; }
+  .gg { font-size: 10px; font-weight: 600; padding: 2px 5px; border-radius: 3px; display: inline-block; }
+  .gg-std { background: var(--blue-tint); color: var(--blue); }
+  .gg-custom { background: var(--warning-bg); color: var(--warning); }
+  .score-wrap { display: flex; align-items: center; gap: 5px; }
+  .score-num { font-size: 12px; font-weight: 500; color: var(--ink); min-width: 20px; }
+  .score-bar-track { width: 40px; background: var(--border); height: 3px; border-radius: 2px; overflow: hidden; }
+  .pg-pill { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 3px; display: inline-block; }
+  .pg-neg { background: var(--danger-bg); color: var(--danger); }
+  .pg-pos { background: var(--success-bg); color: var(--success); }
+  .pg-none { background: var(--surface); color: var(--faint); border: 1px solid var(--border); }
+  .status-pill { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 3px; display: inline-block; }
+  .status-aktiv { background: var(--success-bg); color: var(--success); }
+  .status-entwurf { background: var(--stone); color: var(--muted); }
+  .legend-row {
+    background: #fff;
+    border-top: 1px solid var(--border);
+    padding: 7px 10px;
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--muted); }
+  .legend-dot { width: 7px; height: 7px; border-radius: 2px; }
+
+  /* Gehaltsgruppen screen */
+  .gg-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .gg-table thead tr { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .gg-table thead th { padding: 8px 10px; text-align: left; font-size: 10px; font-weight: 500; color: var(--muted); }
+  .gg-table thead th.center { text-align: center; }
+  .gg-table tbody tr { border-bottom: 1px solid var(--border); }
+  .gg-table tbody tr.empty-row { background: var(--surface); }
+  .gg-table tbody tr.data-row { background: #fff; }
+  .gg-table td { padding: 9px 10px; vertical-align: top; }
+  .status-action-col { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+  .btn-small { font-size: 11px; font-weight: 500; padding: 4px 9px; border-radius: 5px; border: none; font-family: inherit; cursor: pointer; }
+  .btn-release { background: var(--blue); color: #fff; }
+  .btn-revert { background: transparent; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 11px; font-family: inherit; border: none; padding: 0; }
+  .profile-text { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .custom-tag { font-size: 10px; background: var(--warning-bg); color: var(--warning); padding: 1px 5px; border-radius: 3px; display: inline-block; margin-top: 2px; }
+
+  /* Band chips */
+  .band-chips { display: grid; grid-template-columns: repeat(17, minmax(0,1fr)); gap: 3px; padding: 10px; background: #fff; border-bottom: 1px solid var(--border); }
+  .chip { border-radius: 3px; padding: 5px 2px; text-align: center; font-size: 9px; font-weight: 600; border: 1px solid; }
+
+  /* Matrix screen */
+  .matrix-table { border-collapse: collapse; width: 100%; min-width: 700px; font-size: 11px; }
+  .matrix-table th { padding: 8px 8px; text-align: left; font-size: 10px; font-weight: 600; color: var(--ink); border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .matrix-table th.level-col { background: var(--surface); border-left: none; font-weight: 500; color: var(--muted); }
+  .matrix-table th.ohne-col { background: var(--warning-bg); color: var(--warning); }
+  .matrix-table td { padding: 7px 7px; border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); vertical-align: top; }
+  .matrix-table td.level-cell { background: var(--surface); border-left: none; }
+  .matrix-table td.level-cell .lv-name { font-size: 11px; font-weight: 600; color: var(--ink); margin-bottom: 1px; }
+  .matrix-table td.level-cell .lv-sub { font-size: 9px; color: var(--muted); }
+  .job-card { background: #fff; border: 1px solid var(--border); border-radius: 5px; padding: 6px 7px; margin-bottom: 4px; }
+  .job-card:last-child { margin-bottom: 0; }
+  .job-card .jc-name { font-size: 11px; font-weight: 500; color: var(--ink); margin-bottom: 4px; line-height: 1.3; }
+  .job-card .jc-meta { display: flex; align-items: center; justify-content: space-between; }
+  .job-card .jc-count { font-size: 10px; color: var(--muted); }
+  .job-card-review { background: var(--warning-bg); border: 1px solid var(--warning-border); border-radius: 5px; padding: 6px 7px; }
+  .job-card-review .jc-name { font-size: 11px; font-weight: 500; color: var(--warning); margin-bottom: 4px; line-height: 1.3; }
+  .job-card-review .jc-meta { display: flex; align-items: center; justify-content: space-between; }
+  .btn-assign { background: var(--warning); color: #fff; border: none; border-radius: 3px; padding: 2px 6px; font-size: 10px; font-weight: 500; cursor: pointer; font-family: inherit; }
+
+  @media print {
+    .cover { page-break-after: always; min-height: unset; }
+    .page-break { page-break-before: always; }
+    body { font-size: 12px; }
+  }
+  @page { margin: 0; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="logo-row">
+    <div class="logo-mark">
+      <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 11L7 3L12 11" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="logo-name">paygaps</span>
+  </div>
+  <p class="cover-eyebrow">Case Study · Product Designer (UX/UI) · B2B SaaS</p>
+  <h1 class="cover-title">Redesigning<br><span>Stellenübersicht</span><br>for HR clarity</h1>
+  <p class="cover-desc">A direction and craft submission covering visual vision and a full redesign of the Job Overview feature.</p>
+  <div class="cover-footer">
+    <div class="cover-footer-item"><span class="label">Submitted</span><span class="value">June 2026</span></div>
+    <div class="cover-footer-item"><span class="label">Role</span><span class="value">Product Designer (UX/UI)</span></div>
+    <div class="cover-footer-item"><span class="label">Contact</span><span class="value">bewerbung@paygaps.de</span></div>
+  </div>
+</div>
+
+
+<!-- PART A -->
+<div class="page">
+
+  <div class="part-tag">Part A</div>
+  <h1 class="page-title">Direction &amp; Vision</h1>
+  <p class="page-intro">Where I would take PayGaps visually, and the three concrete moves that would make it more intuitive without losing its credibility.</p>
+
+  <!-- 1. Look & Feel -->
+  <div class="section">
+    <h2 class="section-heading">1. Look &amp; Feel</h2>
+    <p class="body-text">PayGaps users are HR managers dealing with a topic that is new, legally significant, and unfamiliar. Many arrive already anxious: responsible for getting compliance right, uncertain where to start. The direction I am proposing, which I am calling <strong>Trusted Advisor</strong>, is designed to feel like a good accountant's office. Structured, unhurried, and credible. The kind of interface that signals you have done this before and so can they.</p>
+    <p class="body-text">Practically: Plus Jakarta Sans for typography, clean and geometric without the clinical feel of Inter. A palette of PayGaps blue, cool neutrals, and a warm stone accent that removes the bureaucratic edge without losing trust. Color used sparingly, only for status, primary actions, and compliance data signals. Whitespace generous. Every screen carries a subtitle that tells the user exactly what they are here to do and why it matters.</p>
+    <p class="body-text">The closest references are Personio (sober German HR professionalism) and Linear (complex workflows that always feel tractable). The goal is the combination of those two sensibilities.</p>
+  </div>
+
+  <!-- 2. Visual Preview -->
+  <div class="section">
+    <h2 class="section-heading">2. Visual direction preview</h2>
+
+    <div class="style-tile">
+      <div>
+        <p class="tile-direction-name">Trusted Advisor</p>
+        <p class="tile-direction-tag">Sober enough for legal weight · Warm enough for anxious users</p>
+
+        <p class="tile-mini-label">Color palette</p>
+        <div class="swatches">
+          <div class="swatch"><div class="swatch-block" style="background:#1A5FAD"></div><span class="swatch-name">Primary</span></div>
+          <div class="swatch"><div class="swatch-block" style="background:#EBF2FA;border:1px solid #C8DCF0"></div><span class="swatch-name">Tint</span></div>
+          <div class="swatch"><div class="swatch-block" style="background:#F7F8FA;border:1px solid #E2E5EA"></div><span class="swatch-name">Surface</span></div>
+          <div class="swatch"><div class="swatch-block" style="background:#F0EDE8;border:1px solid #DDD9D3"></div><span class="swatch-name">Stone</span></div>
+          <div class="swatch"><div class="swatch-block" style="background:#1A1F2E"></div><span class="swatch-name">Ink</span></div>
+        </div>
+        <div class="status-swatches" style="margin-top:6px">
+          <div class="swatch"><div class="status-swatch-block" style="background:#2A7D50"></div><span class="swatch-name">Success</span></div>
+          <div class="swatch"><div class="status-swatch-block" style="background:#B86D0A"></div><span class="swatch-name">Warning</span></div>
+          <div class="swatch"><div class="status-swatch-block" style="background:#BE3030"></div><span class="swatch-name">Danger</span></div>
+        </div>
+
+        <p class="tile-mini-label" style="margin-top:16px">Components</p>
+        <div class="comp-group">
+          <div class="comp-row">
+            <button class="btn-p">Weiter</button>
+            <button class="btn-o">Abbrechen</button>
+          </div>
+          <div class="comp-row">
+            <span class="badge badge-s">Freigegeben</span>
+            <span class="badge badge-b">Entwurf</span>
+            <span class="badge badge-w">Ausstehend</span>
+          </div>
+          <div class="info-chip">Der bereinigte Pay Gap misst den Unterschied nach Kontrolle für Rolle und Erfahrung.</div>
+        </div>
+      </div>
+
+      <div>
+        <p class="tile-mini-label">Typography — Plus Jakarta Sans</p>
+        <div class="type-box">
+          <p class="t1">Heading / 700</p>
+          <p class="t2">Section label / 600</p>
+          <p class="t3">Body text — clear and readable for HR managers, not analysts. Calm, direct, action oriented.</p>
+          <p class="t4">data label · 11px · tracked</p>
+        </div>
+
+        <p class="tile-mini-label">Example screen — Pay Gap overview</p>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden">
+          <div style="background:#1A1F2E;padding:10px 12px;display:flex;align-items:center;gap:6px">
+            <div style="width:18px;height:18px;background:#1A5FAD;border-radius:3px;display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 9L6 3L10 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span style="color:#fff;font-size:11px;font-weight:600">paygaps</span>
+          </div>
+          <div style="padding:12px;background:var(--surface)">
+            <p style="font-size:9px;color:var(--muted);margin:0 0 2px;font-weight:500">Analyse 2025</p>
+            <p style="font-size:13px;font-weight:700;color:var(--ink);margin:0 0 10px">Gehaltsübersicht</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+              <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px">
+                <p style="font-size:9px;color:var(--muted);margin:0 0 3px">Bereinigter Pay Gap</p>
+                <p style="font-size:17px;font-weight:700;color:var(--ink);margin:0 0 2px">3,2%</p>
+                <span style="font-size:10px;color:var(--warning)">Frauen verdienen weniger</span>
+              </div>
+              <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px">
+                <p style="font-size:9px;color:var(--muted);margin:0 0 3px">Analysierte Stellen</p>
+                <p style="font-size:17px;font-weight:700;color:var(--ink);margin:0 0 2px">142</p>
+                <span style="font-size:10px;color:var(--success)">Alle erfasst</span>
+              </div>
+            </div>
+            <div style="background:var(--blue-tint);border:1px solid #B8D0EC;border-radius:5px;padding:7px 9px;font-size:10px;color:var(--blue);line-height:1.5">Kontrolliert für Rolle und Erfahrung — zeigt den unerklärten Unterschied.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Top 3 Measures -->
+  <div class="section">
+    <h2 class="section-heading">3. Top 3 measures</h2>
+
+    <div class="measure">
+      <div class="measure-num">1</div>
+      <h3>A named compliance progress spine</h3>
+      <div class="measure-row">
+        <div class="measure-problem"><strong>User problem</strong>HR managers do not know what done looks like. Every screen feels like a new puzzle. There is no persistent sense of how far along they are or what comes next.</div>
+        <div class="measure-solution"><strong>What it is</strong>A persistent vertical stepper in the sidebar showing the full compliance journey as named, sequenced steps with completion states and a step counter.</div>
+      </div>
+      <div class="measure-look"><strong>What it looks like</strong>Five labelled steps below the main nav. Completed steps show a green checkmark. The active step is highlighted in PayGaps blue. Future steps are greyed with a lock icon. A small counter reads "3 von 5 Schritten." The user always knows where they are and what comes next without navigating away.</div>
+    </div>
+
+    <div class="measure">
+      <div class="measure-num">2</div>
+      <h3>A plain language layer on every data point</h3>
+      <div class="measure-row">
+        <div class="measure-problem"><strong>User problem</strong>Non-technical users do not interpret numbers — they react to them. A Pay Gap of 3.2% means nothing to someone who does not know whether that is normal, alarming, or legally significant.</div>
+        <div class="measure-solution"><strong>What it is</strong>Every compliance metric is paired with a plain language interpretation, visible by default below the number — not hidden in a tooltip. It explains what the value means and whether it requires action.</div>
+      </div>
+      <div class="measure-look"><strong>What it looks like</strong>A blue info callout applied consistently across all data screens. Below a Pay Gap of 3.2%, the callout reads: "Dieser Wert liegt unter dem gesetzlichen Schwellenwert von 5 %. Frauen in vergleichbaren Rollen verdienen durchschnittlich 3,2 % weniger." Repeated across sessions, it teaches users the concepts passively.</div>
+    </div>
+
+    <div class="measure">
+      <div class="measure-num">3</div>
+      <h3>Purposeful microcopy on every screen</h3>
+      <div class="measure-row">
+        <div class="measure-problem"><strong>User problem</strong>Users land on sections like Stellenkatalog or Gehaltsgruppen and immediately think: what am I supposed to do here? Generic labels do not communicate purpose, direction, or stakes.</div>
+        <div class="measure-solution"><strong>What it is</strong>Every screen gets a two-line header: the section name plus a subtitle that answers what you are doing here and why it matters for the compliance report. Empty states explain the next action.</div>
+      </div>
+      <div class="measure-look"><strong>What it looks like</strong>Under Stellenkatalog the subtitle reads: "Stellen definieren und bewerten — Grundlage für eine korrekte Pay-Gap-Analyse." Under Gehaltsgruppen: "Punktebänder freigeben — nur freigegebene Bänder gelten für die Analyse." Every empty table shows a clear explanation and a primary call to action. The language is calm, direct, and always action oriented.</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- PART B -->
+<div class="page page-break">
+
+  <div class="part-tag">Part B</div>
+  <h1 class="page-title">Craft &amp; Edge Cases</h1>
+  <p class="page-intro">A full redesign of the Stellenübersicht across all three tabs, with proposed layouts, key states, and the reasoning behind each decision.</p>
+
+  <p class="body-text" style="margin-bottom:28px">The three tabs form a sequence: define your jobs in Stellenkatalog, configure pay bands in Gehaltsgruppen, and map the organisational structure in Stellenarchitektur. The design challenge across all three is the same — make the information density legible to someone who is not a data analyst, and make the required action obvious without a manual.</p>
+
+  <!-- TAB 1: Stellenkatalog -->
+  <div class="tab-block">
+    <div class="tab-header">
+      <div>
+        <h3>Tab 1 — Stellenkatalog</h3>
+        <p>Stellen definieren und bewerten — Grundlage für eine korrekte Pay-Gap-Analyse</p>
+      </div>
+      <span class="tab-pill">3 ausstehend</span>
+    </div>
+
+    <div class="tab-rationale">
+      <p>The original Stellenkatalog puts too much work on the user before they can read a single row. Two separate color systems share no legend at table level — you have to scroll to the bottom of the page to understand what the colors mean. Draft rows are nearly indistinguishable from active ones. At eight columns, the table reads like a spreadsheet.</p>
+      <p>The redesign reduces cognitive load before the user reaches the data, and makes every row state immediately readable.</p>
+    </div>
+
+    <!-- Screen: Stellenkatalog table -->
+    <div style="padding:14px 16px;background:var(--surface);border-bottom:1px solid var(--border)">
+      <!-- Legend strip -->
+      <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:7px 10px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-size:10px;font-weight:600;color:var(--muted)">Legende</span>
+        <div style="width:.5px;height:10px;background:var(--border)"></div>
+        <span style="font-size:10px;font-weight:600;color:var(--muted)">Bewertung</span>
+        <div class="legend-item"><div class="legend-dot" style="background:#2A7D50"></div>61 oder mehr</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#B86D0A"></div>40 bis 60</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#BE3030"></div>unter 40</div>
+        <div style="width:.5px;height:10px;background:var(--border)"></div>
+        <span style="font-size:10px;font-weight:600;color:var(--muted)">Pay Gap</span>
+        <div class="legend-item"><span class="pg-pill pg-neg" style="font-size:10px;padding:1px 5px">3,2%</span>Frauen verdienen weniger</div>
+        <div class="legend-item"><span class="pg-pill pg-pos" style="font-size:10px;padding:1px 5px">+8,5%</span>mehr</div>
+        <div class="legend-item"><span class="pg-pill pg-none" style="font-size:10px;padding:1px 5px">n&lt;3</span>Zu wenige Daten</div>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden">
+        <table class="sk-table">
+          <thead>
+            <tr>
+              <th>Stellenbezeichnung</th>
+              <th>GG</th>
+              <th>Bewertung</th>
+              <th>Pay Gap</th>
+              <th class="center">Personen</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="job-name">Senior Controller</div><div class="job-sub">Finance &amp; Controlling · Fach</div></td>
+              <td><span class="gg gg-std">GG7</span></td>
+              <td><div class="score-wrap"><span class="score-num">45</span><div class="score-bar-track"><div style="background:#B86D0A;width:45%;height:100%"></div></div></div></td>
+              <td><span class="pg-pill pg-neg">13,4%</span></td>
+              <td class="center" style="font-size:12px;color:var(--ink)">12</td>
+              <td><span class="status-pill status-aktiv">Aktiv</span></td>
+            </tr>
+            <tr>
+              <td><div class="job-name">Head of Finance</div><div class="job-sub">Finance &amp; Controlling · Führung</div></td>
+              <td><span class="gg gg-std">GG8</span></td>
+              <td><div class="score-wrap"><span class="score-num">58</span><div class="score-bar-track"><div style="background:#B86D0A;width:58%;height:100%"></div></div></div></td>
+              <td><span class="pg-pill pg-neg">11,7%</span></td>
+              <td class="center" style="font-size:12px;color:var(--ink)">11</td>
+              <td><span class="status-pill status-aktiv">Aktiv</span></td>
+            </tr>
+            <tr>
+              <td><div class="job-name">HR Manager</div><div class="job-sub">Human Resources · Fach</div></td>
+              <td><span class="gg gg-std">GG6</span></td>
+              <td><div class="score-wrap"><span class="score-num">39</span><div class="score-bar-track"><div style="background:#BE3030;width:39%;height:100%"></div></div></div></td>
+              <td><span class="pg-pill pg-pos">+8,5%</span></td>
+              <td class="center" style="font-size:12px;color:var(--ink)">12</td>
+              <td><span class="status-pill status-aktiv">Aktiv</span></td>
+            </tr>
+            <tr>
+              <td><div class="job-name">Controller</div><div class="job-sub">Finance &amp; Controlling · Fach</div></td>
+              <td><span class="gg gg-custom">G16</span></td>
+              <td><div class="score-wrap"><span class="score-num">36</span><div class="score-bar-track"><div style="background:#BE3030;width:36%;height:100%"></div></div></div></td>
+              <td><span class="pg-pill pg-none">n&lt;3</span></td>
+              <td class="center" style="font-size:12px;color:var(--ink)">7</td>
+              <td><span class="status-pill status-aktiv">Aktiv</span></td>
+            </tr>
+            <tr class="draft">
+              <td><div class="job-name" style="color:var(--muted)">Team Lead Sales</div><div class="job-sub">Sales · Fach</div></td>
+              <td><span style="color:var(--faint);font-size:12px">—</span></td>
+              <td><span style="font-size:11px;color:var(--faint);font-style:italic">Noch nicht bewertet</span></td>
+              <td><span class="pg-pill pg-neg">0,7%</span></td>
+              <td class="center" style="font-size:12px;color:var(--muted)">10</td>
+              <td><span class="status-pill status-entwurf">Entwurf</span></td>
+            </tr>
+            <tr class="draft">
+              <td><div class="job-name" style="color:var(--muted)">Senior HR Manager</div><div class="job-sub">Human Resources · Fach</div></td>
+              <td><span style="color:var(--faint);font-size:12px">—</span></td>
+              <td><span style="font-size:11px;color:var(--faint);font-style:italic">Noch nicht bewertet</span></td>
+              <td><span class="pg-pill pg-pos">+0,4%</span></td>
+              <td class="center" style="font-size:12px;color:var(--muted)">15</td>
+              <td><span class="status-pill status-entwurf">Entwurf</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-decisions">
+      <p class="decisions-label">Key decisions</p>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Legend moved above the table.</strong> In the original it sat below 20 rows, invisible until you scrolled. Moving it directly above means it is in view whenever the user is reading data. They learn the color system passively rather than retroactively.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>GG badge colors unified.</strong> The original gave each grade a different hue with no semantic meaning. A single blue badge for standard grades and amber for custom grades (G16, G17) removes the false hierarchy.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Jobfamilie removed as a column.</strong> It now lives as a secondary line inside the Stellenbezeichnung cell. Same information, less table width, more room for the columns that matter.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Draft rows visually distinct.</strong> Stone background, muted text, italic "Noch nicht bewertet" in the score column, and a neutral badge. The user immediately knows which rows still need attention.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Bewertung simplified to three color stops.</strong> Red, amber, and green. The 61 to 75 vs. above 75 distinction does not change what the user does next, so collapsing it reduces noise without losing anything actionable.</p></div>
+    </div>
+  </div>
+
+
+  <!-- TAB 2: Gehaltsgruppen -->
+  <div class="tab-block">
+    <div class="tab-header">
+      <div>
+        <h3>Tab 2 — Gehaltsgruppen</h3>
+        <p>Punktebänder freigeben — nur freigegebene Bänder gelten für die Analyse</p>
+      </div>
+      <span class="tab-pill">2 freigegeben</span>
+    </div>
+
+    <div class="tab-rationale">
+      <p>The headline problem in the original is a single label: "15 auffällig." Fifteen out of seventeen bands flagged immediately reads as a crisis. But most of those fifteen are simply empty bands that have not been populated yet, which is entirely normal at this stage. The word "auffällig" does not distinguish between a real problem and expected behaviour.</p>
+      <p>The second issue is the status column, which shows two buttons side by side per row — Entwurf and Freigeben — with no signal of which is the current state and which is the available action. The redesign separates state from action across all rows, and replaces alarming language with accurate language.</p>
+    </div>
+
+    <!-- Band chips -->
+    <div style="padding:12px 14px;background:#fff;border-bottom:1px solid var(--border)">
+      <p style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Bandübersicht — nach Punktebereich sortiert (0 bis 100)</p>
+      <div class="band-chips">
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">1</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">2</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">3</div>
+        <div class="chip" style="background:var(--success-bg);color:var(--success);border-color:var(--success)">4</div>
+        <div class="chip" style="background:var(--danger-bg);color:var(--danger);border-color:var(--danger)">5</div>
+        <div class="chip" style="background:var(--warning-bg);color:var(--warning);border-color:var(--warning-border)">G16</div>
+        <div class="chip" style="background:var(--blue-tint);color:var(--blue);border-color:var(--blue)">6</div>
+        <div class="chip" style="background:var(--warning-bg);color:var(--warning);border-color:var(--warning-border)">G17</div>
+        <div class="chip" style="background:var(--danger-bg);color:var(--danger);border-color:var(--danger)">7</div>
+        <div class="chip" style="background:var(--success-bg);color:var(--success);border-color:var(--success)">8</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">9</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">10</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">11</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">12</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">13</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">14</div>
+        <div class="chip" style="background:var(--surface);color:var(--faint);border-color:var(--border)">15</div>
+      </div>
+    </div>
+
+    <!-- GG Table (selected rows) -->
+    <div style="padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border)">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden">
+        <table class="gg-table">
+          <thead>
+            <tr>
+              <th style="width:48px">GG</th>
+              <th style="width:54px">Punkte</th>
+              <th>Tätigkeitsprofil</th>
+              <th class="center" style="width:68px">Stellen / MA</th>
+              <th style="width:76px">Pay Gap</th>
+              <th style="width:108px">Status &amp; Aktion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="empty-row">
+              <td style="font-size:11px;font-weight:600;color:var(--faint)">GG1–3</td>
+              <td style="font-size:11px;color:var(--faint)">10–24</td>
+              <td colspan="3" style="font-size:11px;color:var(--faint);font-style:italic">3 Gruppen · Keine Stellen zugewiesen</td>
+              <td style="font-size:11px;color:var(--faint)">Entwurf</td>
+            </tr>
+            <tr class="data-row">
+              <td><span class="gg gg-std" style="font-size:10px">GG4</span></td>
+              <td style="font-size:12px;color:var(--ink)">25–30</td>
+              <td><p class="profile-text">Eigenständige Routinetätigkeit auf Basis einer Berufsausbildung…</p></td>
+              <td class="center" style="font-size:12px;font-weight:500;color:var(--ink)">2 / 24</td>
+              <td><span class="pg-pill pg-pos">+2,6%</span></td>
+              <td>
+                <div class="status-action-col">
+                  <span class="badge badge-s" style="font-size:10px">Freigegeben</span>
+                  <button class="btn-revert">Bearbeiten</button>
+                </div>
+              </td>
+            </tr>
+            <tr class="data-row">
+              <td><span class="gg gg-std" style="font-size:10px">GG5</span></td>
+              <td style="font-size:12px;color:var(--ink)">31–34</td>
+              <td><p class="profile-text">Qualifizierte Facharbeit auf Basis einer abgeschlossenen Ausbildung…</p></td>
+              <td class="center" style="font-size:12px;font-weight:500;color:var(--ink)">2 / 28</td>
+              <td><span class="pg-pill pg-neg">5,1%</span></td>
+              <td>
+                <div class="status-action-col">
+                  <span class="badge badge-n" style="font-size:10px">Entwurf</span>
+                  <button class="btn-small btn-release">Freigeben</button>
+                </div>
+              </td>
+            </tr>
+            <tr class="data-row">
+              <td><span class="gg gg-custom" style="font-size:10px">G16</span></td>
+              <td style="font-size:12px;color:var(--ink)">35–37</td>
+              <td><p class="profile-text">Neue Grade, aufgeteilt aus GG5</p><span class="custom-tag">Benutzerdefiniert</span></td>
+              <td class="center" style="font-size:12px;font-weight:500;color:var(--ink)">3 / 25</td>
+              <td><span class="pg-pill pg-pos">+7,2%</span></td>
+              <td>
+                <div class="status-action-col">
+                  <span class="badge badge-n" style="font-size:10px">Entwurf</span>
+                  <button class="btn-small btn-release">Freigeben</button>
+                </div>
+              </td>
+            </tr>
+            <tr class="data-row">
+              <td><span class="gg gg-std" style="font-size:10px">GG7</span></td>
+              <td style="font-size:12px;color:var(--ink)">45–51</td>
+              <td><p class="profile-text">Breite Fachexpertise mit ausgeprägtem Spezialwissen…</p></td>
+              <td class="center" style="font-size:12px;font-weight:500;color:var(--ink)">1 / 12</td>
+              <td><span class="pg-pill pg-neg">13,4%</span></td>
+              <td>
+                <div class="status-action-col">
+                  <span class="badge badge-n" style="font-size:10px">Entwurf</span>
+                  <button class="btn-small btn-release">Freigeben</button>
+                </div>
+              </td>
+            </tr>
+            <tr class="data-row">
+              <td><span class="gg gg-std" style="font-size:10px">GG8</span></td>
+              <td style="font-size:12px;color:var(--ink)">52–58</td>
+              <td><p class="profile-text">Senior-Fachexpertise mit Weitergabe von Fachkenntnissen…</p></td>
+              <td class="center" style="font-size:12px;font-weight:500;color:var(--ink)">4 / 42</td>
+              <td><span class="pg-pill pg-neg">4,0%</span></td>
+              <td>
+                <div class="status-action-col">
+                  <span class="badge badge-s" style="font-size:10px">Freigegeben</span>
+                  <button class="btn-revert">Bearbeiten</button>
+                </div>
+              </td>
+            </tr>
+            <tr class="empty-row">
+              <td colspan="6" style="padding:8px 10px">
+                <span style="font-size:11px;color:var(--faint);font-style:italic">GG9 bis GG15 · 7 Gruppen · Keine Stellen zugewiesen</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-decisions">
+      <p class="decisions-label">Key decisions</p>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>"15 auffällig" replaced with "15 noch nicht freigegeben."</strong> Accurate, calm, and does not flag a problem that does not exist. The number stays the same. The interpretation changes completely.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>State and action separated vertically in every row.</strong> The badge tells you what the row currently is. The button below tells you what you can do. They are visually distinct and never at the same prominence level.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>G16 and G17 marked as Benutzerdefiniert inline.</strong> In the original they appeared at the bottom with red left borders, visually indistinguishable from errors. In the redesign they sit in their correct point-range positions with an amber label explaining their origin.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Empty grades de-emphasised, not hidden.</strong> GG1 to 3 and GG9 to 15 are shown with muted text and a secondary background. GG9 to 15 collapse into a single row. They are not removed, but they stop competing with populated grades for attention.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Band chart replaced with a status chip grid.</strong> One chip per grade, colour-coded by status, ordered by point range. Gives an immediate overview without requiring the user to decode a positional axis chart.</p></div>
+    </div>
+  </div>
+
+
+  <!-- TAB 3: Stellenarchitektur -->
+  <div class="tab-block">
+    <div class="tab-header">
+      <div>
+        <h3>Tab 3 — Stellenarchitektur</h3>
+        <p>Stellen nach Jobfamilie und Level einordnen — Grundlage für den Vergleich gleichwertiger Tätigkeiten (Art. 4 EU-RL)</p>
+      </div>
+      <span class="tab-pill">3 Review offen</span>
+    </div>
+
+    <div class="tab-rationale">
+      <p>The matrix is conceptually the strongest tab in the product. Level cross Jobfamilie is immediately spatial and legible. Most users can orient themselves on first sight. The main issues are structural rather than conceptual.</p>
+      <p>Three jobs have no family assignment (Head of HR, Team Lead Sales, Senior HR Manager) and appear as plain Entwurf cards in the Ohne Jobfamilie column. The urgency of resolving them is not communicated at all. Empty rows at Director and Trainee level create visual uncertainty about whether the matrix is complete or broken. The review banner in the original reads like a collapsed settings panel rather than the most important action on the screen.</p>
+    </div>
+
+    <!-- Callout -->
+    <div style="margin:12px 14px 0;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:7px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B86D0A" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div style="flex:1">
+        <p style="font-size:12px;font-weight:500;color:var(--warning);margin:0 0 1px">3 Stellen ohne Jobfamilie — bitte einordnen</p>
+        <p style="font-size:11px;color:var(--warning);margin:0;opacity:.85">Head of HR, Team Lead Sales und Senior HR Manager sind noch nicht zugeordnet.</p>
+      </div>
+      <button style="background:var(--warning);color:#fff;border:none;border-radius:5px;padding:5px 10px;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;white-space:nowrap">Zuordnen</button>
+    </div>
+
+    <!-- Matrix -->
+    <div style="padding:12px 14px;background:var(--surface)">
+      <div style="overflow-x:auto;background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th class="level-col" style="border-left:none;border-bottom:1px solid var(--border)">Level</th>
+              <th style="border-bottom:1px solid var(--border)">Business Admin.</th>
+              <th style="border-bottom:1px solid var(--border)">Finanzen</th>
+              <th style="border-bottom:1px solid var(--border)">Marketing</th>
+              <th style="border-bottom:1px solid var(--border)">Personalwesen</th>
+              <th style="border-bottom:1px solid var(--border)">Vertrieb</th>
+              <th class="ohne-col" style="border-bottom:1px solid var(--border)">Ohne Familie</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="level-cell"><p class="lv-name">Principal / Manager</p><p class="lv-sub">übergreifend</p></td>
+              <td></td>
+              <td><div class="job-card"><p class="jc-name">Head of Finance</p><div class="jc-meta"><span class="jc-count">11 · Führung</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card"><p class="jc-name">Head of Marketing</p><div class="jc-meta"><span class="jc-count">10 · Führung</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td></td>
+              <td><div class="job-card"><p class="jc-name">Head of Sales</p><div class="jc-meta"><span class="jc-count">16 · Führung</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card-review"><p class="jc-name">Head of HR</p><div class="jc-meta"><span style="font-size:10px;color:var(--warning)">8 MA</span><button class="btn-assign">Zuordnen</button></div></div></td>
+            </tr>
+            <tr>
+              <td class="level-cell"><p class="lv-name">Lead</p><p class="lv-sub">übergreifend</p></td>
+              <td></td>
+              <td></td>
+              <td><div class="job-card"><p class="jc-name">Team Lead Marketing</p><div class="jc-meta"><span class="jc-count">5 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td></td>
+              <td></td>
+              <td><div class="job-card-review"><p class="jc-name">Team Lead Sales</p><div class="jc-meta"><span style="font-size:10px;color:var(--warning)">10 MA</span><button class="btn-assign">Zuordnen</button></div></div></td>
+            </tr>
+            <tr>
+              <td class="level-cell"><p class="lv-name">Senior</p><p class="lv-sub">übergreifend</p></td>
+              <td></td>
+              <td><div class="job-card"><p class="jc-name">Senior Controller</p><div class="jc-meta"><span class="jc-count">12 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card"><p class="jc-name">Senior Marketing Mgr.</p><div class="jc-meta"><span class="jc-count">14 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td></td>
+              <td><div class="job-card"><p class="jc-name">Senior Sales Manager</p><div class="jc-meta"><span class="jc-count">11 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card-review"><p class="jc-name">Senior HR Manager</p><div class="jc-meta"><span style="font-size:10px;color:var(--warning)">15 MA</span><button class="btn-assign">Zuordnen</button></div></div></td>
+            </tr>
+            <tr>
+              <td class="level-cell"><p class="lv-name">Professional</p><p class="lv-sub">übergreifend</p></td>
+              <td><div class="job-card"><p class="jc-name">Executive Assistant</p><div class="jc-meta"><span class="jc-count">12 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card"><p class="jc-name">Controller</p><div class="jc-meta"><span class="jc-count">7 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card"><p class="jc-name">Marketing Manager</p><div class="jc-meta"><span class="jc-count">8 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td>
+                <div class="job-card" style="margin-bottom:4px"><p class="jc-name">HR Coordinator</p><div class="jc-meta"><span class="jc-count">15 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div>
+                <div class="job-card"><p class="jc-name">HR Manager</p><div class="jc-meta"><span class="jc-count">12 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div>
+              </td>
+              <td><div class="job-card"><p class="jc-name">Sales Manager</p><div class="jc-meta"><span class="jc-count">15 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="level-cell"><p class="lv-name">Junior</p><p class="lv-sub">übergreifend</p></td>
+              <td><div class="job-card"><p class="jc-name">Office Manager</p><div class="jc-meta"><span class="jc-count">13 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card"><p class="jc-name">Junior Controller</p><div class="jc-meta"><span class="jc-count">17 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td><div class="job-card"><p class="jc-name">Junior Marketing Mgr.</p><div class="jc-meta"><span class="jc-count">7 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td></td>
+              <td><div class="job-card"><p class="jc-name">Junior Sales Manager</p><div class="jc-meta"><span class="jc-count">10 · Fach</span><span class="badge badge-s" style="font-size:10px;padding:1px 5px">Eingestuft</span></div></div></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-decisions">
+      <p class="decisions-label">Key decisions</p>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Three unclassified jobs surfaced as a named callout above the matrix.</strong> "3 Stellen ohne Jobfamilie" names the items, counts them, and provides a direct action. The issue is impossible to miss. Resolving it is one click per card.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Job cards simplified to two lines.</strong> Title plus headcount and track on one line with a status badge. The subfamilie subtitle was redundant given the column header and added noise in small cells.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Ohne Jobfamilie column header tinted amber.</strong> It reads as a temporary holding area, not a permanent column. A first-time user immediately understands that items here have not been placed yet rather than assuming it is a valid destination.</p></div>
+      <div class="decision"><div class="d-dot"></div><p class="d-text"><strong>Matrix scrolls horizontally at a proper minimum width.</strong> Cards hold their proportions rather than squashing into the viewport. Readability is preserved at any screen size.</p></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
